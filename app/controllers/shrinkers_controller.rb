@@ -4,9 +4,8 @@ class ShrinkersController < ApplicationController
 
 
   def shrink
-    puts params
-    original_url = params[:original_url]
-    print original_url
+    original_url = params[:url][:original]
+    puts original_url
   end
 
 end
