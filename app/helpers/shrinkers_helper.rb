@@ -1,0 +1,2 @@
+module ShrinkersHelper
+end
