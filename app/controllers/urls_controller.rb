@@ -2,10 +2,19 @@ require 'digest'
 
 class UrlsController < ApplicationController
   def create
+    # First check if the same url already exists
+    existing = Url.find_by_original(url_params[:original])
+
+    # If the record already exists in DB, then just return
+    if existing
+      puts existing.shrunken
+      return
+    end
+
     # Create a new url object from the parameters dictionary
     @url = Url.new(url_params)
 
-    # Add the shrunker url to the object
+    # Add the shrunken url to the object
     @url.shrunken = shrink_it(@url.original)
 
     # Save the object to db
