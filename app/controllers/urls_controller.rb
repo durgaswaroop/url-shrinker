@@ -1,14 +1,31 @@
+require 'digest'
+
 class UrlsController < ApplicationController
   def create
     # Create a new url object from the parameters dictionary
-    puts @url
     @url = Url.new(url_params)
+
+    # Add the shrunker url to the object
+    @url.shrunken = shrink_it(@url.original)
+
+    # Save the object to db
+    if @url.save
+      puts 'url saved in DB'
+    end
   end
 
   # Url params.
   private
   def url_params
     params.require(:url).permit(:original)
+  end
+
+  def shrink_it(original_url)
+    md5 = Digest::MD5.new
+    # Take first 6 characters of the hash
+    shrunk_hash = md5.update(original_url).base64digest[0,6]
+    puts shrunk_hash
+    shrunk_hash
   end
 
 end
