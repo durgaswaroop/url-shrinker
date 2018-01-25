@@ -16,6 +16,9 @@ def index():
 @app.route('/', methods=['POST'])
 def index_post():
     url = request.form['url']
+    if not validate_url(url):
+        return render_template('index.html', shrunken_url="Entered URL is not valid. Only Valid URL's can be shrunken")
+
     return render_template('index.html', shrunken_url=shrink_it(url))
 
 
