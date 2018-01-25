@@ -1,5 +1,7 @@
 from flask import Flask, render_template, request
 
+import hashlib
+
 app = Flask(__name__)
 
 
@@ -11,7 +13,13 @@ def index():
 @app.route('/', methods=['POST'])
 def index_post():
     url = request.form['url']
-    return url
+    return shrink_it(url)
+
+
+def shrink_it(url):
+    hash = hashlib.md5()
+    hash.update(url.encode('UTF-8'))
+    return hash.hexdigest()[:7]
 
 
 def main():
