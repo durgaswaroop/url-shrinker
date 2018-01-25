@@ -19,9 +19,34 @@ class RouterTest(unittest.TestCase):
         assert soup.find('title').text == "Swaroop's URL Shrinker"
         assert soup.find('h1').text == "Swaroop's URL Shrinker"
 
+        # There would be two input tags on the home page
+        input_tags = soup.find_all('input')
+        for tag in input_tags:
+            # For url tag, value should be "http://"
+            if tag['name'] == 'url':
+                assert tag['value'] == 'http://'
+
+            # For submit button the text should say "Shrink It!"
+            if tag['name'] == 'submit':
+                assert tag['value'] == 'Shrink It!'
+
+        # We also have a paragraph tag which will be empty for the initial page load
+        assert not soup.find('p').text
+
     def test_url_shrinking(self):
-        response = self.app.post('/', data={"url": "http://freblogg.com"})
-        print(response.data)
+        website = "http://freblogg.com"
+        raw_html = self.app.post('/', data={"url": website}).data
+        soup = bs(raw_html, "html.parser")
+
+        url_input = soup.find('input', {"name": "url"})
+
+        # When we have submitted the url, the url value should be set to the entered url when it reloads
+        assert url_input['value'] == website
+
+        # Paragraph tag must now have text
+        paragraph = soup.find('p')
+
+        assert paragraph.text == "http://localhost:5000/3dc1318"
 
     def test_url_validation(self):
         valid_urls = [
