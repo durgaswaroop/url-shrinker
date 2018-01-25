@@ -10,16 +10,17 @@ hostname = "http://localhost:5000/"
 
 @app.route('/')
 def index():
-    return render_template('index.html', shrunken_url="")
+    return render_template('index.html', entered_url="http://", shrunken_url="")
 
 
 @app.route('/', methods=['POST'])
 def index_post():
     url = request.form['url']
     if not validate_url(url):
-        return render_template('index.html', shrunken_url="Entered URL is not valid. Only Valid URL's can be shrunken")
+        return render_template('index.html', entered_url=url,
+                               shrunken_url="Entered URL is not valid. Only Valid URL's can be shrunken")
 
-    return render_template('index.html', shrunken_url=shrink_it(url))
+    return render_template('index.html', entered_url=url, shrunken_url=shrink_it(url))
 
 
 def shrink_it(url):
