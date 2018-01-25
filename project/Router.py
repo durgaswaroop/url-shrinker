@@ -5,6 +5,8 @@ import hashlib
 
 app = Flask(__name__)
 
+hostname = "http://localhost:5000/"
+
 
 @app.route('/')
 def index():
@@ -20,7 +22,7 @@ def index_post():
 def shrink_it(url):
     hash = hashlib.md5()
     hash.update(url.encode('UTF-8'))
-    return hash.hexdigest()[:7]
+    return hostname + hash.hexdigest()[:7]
 
 
 def validate_url(url):
