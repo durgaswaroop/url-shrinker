@@ -7,13 +7,13 @@ app = Flask(__name__)
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('index.html', shrunken_url="")
 
 
 @app.route('/', methods=['POST'])
 def index_post():
     url = request.form['url']
-    return shrink_it(url)
+    return render_template('index.html', shrunken_url=shrink_it(url))
 
 
 def shrink_it(url):
