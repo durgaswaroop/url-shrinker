@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request
+import validators
 
 import hashlib
 
@@ -20,6 +21,10 @@ def shrink_it(url):
     hash = hashlib.md5()
     hash.update(url.encode('UTF-8'))
     return hash.hexdigest()[:7]
+
+
+def validate_url(url):
+    return validators.url(url)
 
 
 def main():
